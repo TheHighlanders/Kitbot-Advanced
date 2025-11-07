@@ -27,14 +27,31 @@ public class CoralReleaser extends SubsystemBase {
   /*
    *   Hint: Objects and variables are declared here
    */
-
+  SparkClosedLoopController CoralController = new Dropper.SparkClosedLoopController();
+  RelativeEncoder coralEncoder;
+  double KP = 0.1;
+  double KI = 0.0;
+  double KD = 0.0;
+ 
 
   public CoralReleaser() {
-    /*
-     * Hint: This is where the NEO's and Sparkmax's settings and/or configurations are set up.
-     * Anything that interacts with the NEOs and Sparkmax goes here too
-     */
+    
+     // Hint: This is where the NEO's and Sparkmax's settings and/or configurations are set up.
+      SparkMaxConfig DropperConfig = new SparkMaxConfig();
+  coralEncoder = Drop.getEncoder();
+    
+   config.closedLoop
+    .p(kP)
+    .i(kI)
+    .d(kD)
+    .outputRange(kMinOutput, kMaxOutput);
+
+     spark.configure(config, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
   
+
+     //Anything that interacts with the NEOs and Sparkmax goes here too
+  
+
     // For Elastic and Advtange Scope
     SmartDashboard.putNumber("PID/kP", kP);
     SmartDashboard.putNumber("PID/kI", kI);
@@ -42,9 +59,17 @@ public class CoralReleaser extends SubsystemBase {
     SmartDashboard.putNumber("Target RPM", targetRPM);
   }
 
-  /*
-   * Hint: New Commands and Methods go here
-   */
+  
+    //Hint: New Commands and Methods go here
+    public Command PIDCMD(){
+        return runOnce(
+        ()-> {
+        m_controller.setReference(setPoint, ControlType.kVelocity);
+      });
+    }
+    
+    }
+   
 
   @Override
   // This method will be called once per scheduler run
