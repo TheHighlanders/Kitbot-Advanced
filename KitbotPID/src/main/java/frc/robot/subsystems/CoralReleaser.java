@@ -24,17 +24,35 @@ public class CoralReleaser extends SubsystemBase {
    * The name of the object is dropper, the ID is 5 and the motor is brushed (it's a CIM motor)
    */
   private SparkMax Dropper = new SparkMax(5,MotorType.kBrushless);
-  /*
-   *   Hint: Objects and variables are declared here
-   */
-
-
-  public CoralReleaser() {
     /*
-     * Hint: This is where the NEO's and Sparkmax's settings and/or configurations are set up.
-     * Anything that interacts with the NEOs and Sparkmax goes here too
-     */
-  
+    *   Hint: Objects and variables are declared here
+    */
+    RelativeEncoder coralEncoder;
+    SparkClosedLoopController coralController = new SparkClosedLoopController();
+    
+    double Kp = 0.1;
+    double Ki = 0.0;
+    double Kd = 0.0;
+    public CoralReleaser() {
+      /*
+      * Hint: This is where the NEO's and Sparkmax's settings and/or configurations are set up.
+      * Anything that interacts with the NEOs and Sparkmax goes here too
+      */
+      // Set the setpoint of the controller in raw position mode, with a feedforward
+      SparkMaxConfig DropperConfig = new SparkMaxConfig();
+      coralEncoder = Dropper.getEncoder();
+  RelativeEncoder coralEncoder;
+
+    config.closedLoop
+        // Set PID gains for position control in slot 0.
+        // We don't have to pass a slot number since the default is slot 0.
+        .p(kP)
+        .i(kI)
+        .d(kD)
+        .outputRange(kMinOutput, kMaxOutput);
+
+// Set the setpoint of the PID controller in raw position mode
+m_controller.setReference(setPoint, ControlType.kPosition);
     // For Elastic and Advtange Scope
     SmartDashboard.putNumber("PID/kP", kP);
     SmartDashboard.putNumber("PID/kI", kI);
