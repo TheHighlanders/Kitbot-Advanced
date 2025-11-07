@@ -38,33 +38,33 @@ public class CoralReleaser extends SubsystemBase {
     
      // Hint: This is where the NEO's and Sparkmax's settings and/or configurations are set up.
       SparkMaxConfig DropperConfig = new SparkMaxConfig();
-  coralEncoder = Drop.getEncoder();
+  coralEncoder = Dropper.getEncoder();
     
-   config.closedLoop
-    .p(kP)
-    .i(kI)
-    .d(kD)
-    .outputRange(kMinOutput, kMaxOutput);
+   DropperConfig.closedLoop
+    .p(KP)
+    .i(KI)
+    .d(KD);
+    
 
-     spark.configure(config, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
+     Dropper.configure(DropperConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
   
 
      //Anything that interacts with the NEOs and Sparkmax goes here too
   
 
     // For Elastic and Advtange Scope
-    SmartDashboard.putNumber("PID/kP", kP);
-    SmartDashboard.putNumber("PID/kI", kI);
-    SmartDashboard.putNumber("PID/kD", kD);
-    SmartDashboard.putNumber("Target RPM", targetRPM);
+    SmartDashboard.putNumber("PID/kP", KP);
+    SmartDashboard.putNumber("PID/kI", KI);
+    SmartDashboard.putNumber("PID/kD", KD);
+    //SmartDashboard.putNumber("Target RPM", targetRPM);
   }
 
   
     //Hint: New Commands and Methods go here
-    public Command PIDCMD(){
+    public Command PIDCMD(double targetRPM){
         return runOnce(
         ()-> {
-        m_controller.setReference(setPoint, ControlType.kVelocity);
+        CoralController.setReference(targetRPM, ControlType.kVelocity);
       });
     }
     
@@ -75,12 +75,12 @@ public class CoralReleaser extends SubsystemBase {
   // This method will be called once per scheduler run
   public void periodic() {
     // For Elastic and Advtange Scope
-    double newP = SmartDashboard.getNumber("PID/kP", kP);
-    double newI = SmartDashboard.getNumber("PID/kI", kI);
-    double newD = SmartDashboard.getNumber("PID/kD", kD);
-    double newTargetRPM = SmartDashboard.getNumber("Target RPM", targetRPM);
+    double newP = SmartDashboard.getNumber("PID/kP", KP);
+    double newI = SmartDashboard.getNumber("PID/kI", KI);
+    double newD = SmartDashboard.getNumber("PID/kD", KD);
+    //double newTargetRPM = SmartDashboard.getNumber("Target RPM", targetRPM);
    
-    SmartDashboard.putNumber("Dropper Setpoint", targetRPM);   // Setpoint
+    //SmartDashboard.putNumber("Dropper Setpoint", targetRPM);   // Setpoint
     SmartDashboard.putNumber("Dropper Velocity", coralEncoder.getVelocity()); // Actual velocity
  
   }
