@@ -16,6 +16,7 @@ import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class CoralReleaser extends SubsystemBase {
@@ -23,10 +24,30 @@ public class CoralReleaser extends SubsystemBase {
    * Creates a Sparkmax Object so we can control the Sparkmax that is plugged into the motor
    * The name of the object is dropper, the ID is 5 and the motor is brushed (it's a CIM motor)
    */
-  private SparkMax Dropper = new SparkMax(5,MotorType.kBrushless);
+  SparkMax Dropper = new SparkMax(5,MotorType.kBrushless);
   /*
    *   Hint: Objects and variables are declared here
    */
+
+   
+  // To use a SparkMax, we create a SparkMax object. To use PID, we have to use the PID Object. 
+  // REVLib have their own PID Object called SparkClosedLoopController.
+  SparkClosedLoopController coralController = Dropper.getClosedLoopController();
+  
+  // Encoder: A sensor that measures the amount of rotations
+  RelativeEncoder coralEncoder;
+  
+  // PID
+  double kP = 0.1;
+  double kI = 0.0;
+  double kD = 0.0;
+  double targetRPM = 0.0;
+
+  // pid config
+  SparkMaxConfig DropperConfig = new SparkMaxConfig();
+  
+  
+  
 
 
   public CoralReleaser() {
@@ -34,8 +55,21 @@ public class CoralReleaser extends SubsystemBase {
      * Hint: This is where the NEO's and Sparkmax's settings and/or configurations are set up.
      * Anything that interacts with the NEOs and Sparkmax goes here too
      */
-  
-    // For Elastic and Advtange Scope
+
+    // initialize encoder
+    coralEncoder = Dropper.getEncoder();
+
+    // Set PID gains
+    DropperConfig.closedLoop
+      .p(kP)
+      .i(kI)
+      .d(kD);
+    
+    // dropper config
+    Dropper.configure(DropperConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
+
+    // For Elastic and Advantage 
+    
     SmartDashboard.putNumber("PID/kP", kP);
     SmartDashboard.putNumber("PID/kI", kI);
     SmartDashboard.putNumber("PID/kD", kD);
@@ -45,6 +79,18 @@ public class CoralReleaser extends SubsystemBase {
   /*
    * Hint: New Commands and Methods go here
    */
+  public Command PIDCMD(double newTargetRPM) {
+
+    // advantage scope (?)
+    targetRPM = newTargetRPM;
+    
+    return runOnce(
+      () -> {
+        coralController.setReference(newTargetRPM, ControlType.kVelocity);
+      }
+    );
+
+  }
 
   @Override
   // This method will be called once per scheduler run
