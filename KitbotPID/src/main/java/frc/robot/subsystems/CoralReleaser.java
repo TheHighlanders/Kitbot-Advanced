@@ -24,7 +24,7 @@ public class CoralReleaser extends SubsystemBase {
    * Creates a Sparkmax Object so we can control the Sparkmax that is plugged into the motor
    * The name of the object is dropper, the ID is 5 and the motor is brushed (it's a CIM motor)
    */
-  SparkMax Dropper = new SparkMax(5,MotorType.kBrushless);
+  SparkMax Dropper = new SparkMax(5,MotorType.kBrushed);
   /*
    *   Hint: Objects and variables are declared here
    */
@@ -38,9 +38,9 @@ public class CoralReleaser extends SubsystemBase {
   RelativeEncoder coralEncoder;
   
   // PID
-  double kP = 0.1;
-  double kI = 0.0;
-  double kD = 0.0;
+  double kP = 0.5;
+  double kI = 0.01;
+  double kD = 0.01;
   double targetRPM = 0.0;
 
   // pid config
