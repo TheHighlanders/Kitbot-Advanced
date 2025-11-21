@@ -36,10 +36,10 @@ public class CoralReleaser extends SubsystemBase {
      */
   
     // For Elastic and Advtange Scope
-    SmartDashboard.putNumber("PID/kP", kP);
-    SmartDashboard.putNumber("PID/kI", kI);
-    SmartDashboard.putNumber("PID/kD", kD);
-    SmartDashboard.putNumber("Target RPM", targetRPM);
+    // SmartDashboard.putNumber("PID/kP", kP);
+    // SmartDashboard.putNumber("PID/kI", kI);
+    // SmartDashboard.putNumber("PID/kD", kD);
+    // SmartDashboard.putNumber("Target RPM", targetRPM);
   }
 
   /*
@@ -50,13 +50,13 @@ public class CoralReleaser extends SubsystemBase {
   // This method will be called once per scheduler run
   public void periodic() {
     // For Elastic and Advtange Scope
-    double newP = SmartDashboard.getNumber("PID/kP", kP);
-    double newI = SmartDashboard.getNumber("PID/kI", kI);
-    double newD = SmartDashboard.getNumber("PID/kD", kD);
-    double newTargetRPM = SmartDashboard.getNumber("Target RPM", targetRPM);
+    // double newP = SmartDashboard.getNumber("PID/kP", kP);
+    // double newI = SmartDashboard.getNumber("PID/kI", kI);
+    // double newD = SmartDashboard.getNumber("PID/kD", kD);
+    // double newTargetRPM = SmartDashboard.getNumber("Target RPM", targetRPM);
    
-    SmartDashboard.putNumber("Dropper Setpoint", targetRPM);   // Setpoint
-    SmartDashboard.putNumber("Dropper Velocity", coralEncoder.getVelocity()); // Actual velocity
+    // SmartDashboard.putNumber("Dropper Setpoint", targetRPM);   // Setpoint
+    // SmartDashboard.putNumber("Dropper Velocity", coralEncoder.getVelocity()); // Actual velocity
  
   }
 }
